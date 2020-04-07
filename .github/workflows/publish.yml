@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "10.x"
+      - name: NPM Publish
+        run: |
+          CI_COMMIT_TAG=${GITHUB_REF##*/}
+          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+          yarn
+          yarn build
+          yarn publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

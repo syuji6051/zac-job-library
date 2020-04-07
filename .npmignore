@@ -1,0 +1,8 @@
+src/*
+!src/@types
+.editorconfig
+.gitignore
+.tsconfig.json
+.npmignore
+tslint.yml
+yarn.lock

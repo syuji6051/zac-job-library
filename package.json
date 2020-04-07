@@ -1,0 +1,29 @@
+{
+  "name": "obc-client",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "types": "./src/@types/index",
+  "scripts": {
+    "start": "ts-node src/execute",
+    "build": "tsc"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^2.0.0",
+    "@types/puppeteer-core": "^2.0.0",
+    "puppeteer": "^2.0.0",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "puppeteer-core": "^2.0.0",
+    "winston": "^3.2.1"
+  }
+}
