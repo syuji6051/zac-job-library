@@ -1,7 +1,7 @@
 {
   "name": "@syujiokamura/obc-client",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/obc-client.js",
   "license": "MIT",
   "types": "./src/@types/index",
   "scripts": {
