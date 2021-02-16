@@ -1,0 +1,43 @@
+{
+  "name": "@syuji6051/zac-job-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syuji6051/zac-job-library.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/syuji6051/zac-job-library/issues"
+  },
+  "homepage": "https://github.com/syuji6051/zac-job-library#readme",
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "aws-sdk": "^2.843.0",
+    "puppeteer": "^7.1.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.72",
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.27",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-webpack": "^0.13.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typescript": "^4.1.3"
+  }
+}
