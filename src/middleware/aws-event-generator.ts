@@ -1,29 +1,83 @@
-import { Request } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import {
+  APIGatewayProxyWithLambdaAuthorizerEvent,
+  APIGatewayProxyWithLambdaAuthorizerEventRequestContext,
+  APIGatewayRequestAuthorizerEvent,
   EventBridgeEvent,
   S3Event,
 } from 'aws-lambda';
 
-export function apiGatewayEventGenerator<EventT>(req: Request): EventT {
-  const requestContext = <any>{
-    resourceId: req.headers['x-express-resource-id'],
-    apiId: req.headers['x-amzn-api-id'],
+export interface CustomAuthorizerRequest extends Request {
+  apiGateway?: {
+    event: APIGatewayRequestAuthorizerEvent
+  }
+}
+
+export interface CustomAuthorizerContext {
+  userNo?: string
+}
+
+export interface CustomRequest extends Request {
+  apiGateway?: {
+    event: APIGatewayProxyWithLambdaAuthorizerEvent<CustomAuthorizerContext>
+  }
+}
+
+export const apiGatewayEventGenerator = () => (
+  req: CustomRequest, _: Response, next: NextFunction,
+) => {
+  const requestContext: APIGatewayProxyWithLambdaAuthorizerEventRequestContext<
+  CustomAuthorizerContext> = {
+    accountId: null,
+    path: req.path,
+    protocol: null,
+    stage: req.header('x-mgw-apigateway-stage') || null,
+    requestId: req.header('x-apigateway-request-id') || null,
+    requestTimeEpoch: null,
+    resourcePath: req.header('x-apigateway-resource-path') || null,
+    resourceId: req.header('x-apigateway-id'),
+    httpMethod: req.header('x-apigateway-http-method') || null,
+    apiId: req.header('x-amzn-apigateway-id'),
     authorizer: {
-      claims: {
-        'cognito:username': req.headers['x-identity-user'],
-      },
+      principalId: null,
+      integrationLatency: null,
     },
     identity: {
-      user: req.headers['x-identity-user'],
+      user: req.header('x-identity-user'),
+      accessKey: null,
+      accountId: null,
+      apiKey: req.header('x-apigateway-api-key'),
+      apiKeyId: null,
+      caller: null,
+      cognitoAuthenticationProvider: null,
+      cognitoAuthenticationType: null,
+      cognitoIdentityId: null,
+      cognitoIdentityPoolId: null,
+      principalOrgId: null,
+      sourceIp: req.header('x-apigateway-source-ip') || null,
+      userAgent: req.header('x-apigateway-user-agent') || null,
+      userArn: req.header('x-apigateway-user-arn') || null,
     },
   };
-  return {
+  const event: APIGatewayProxyWithLambdaAuthorizerEvent<CustomAuthorizerContext> = {
     pathParameters: req.params,
-    queryStringParameters: req.query,
+    queryStringParameters: req.query as { [name: string]: string },
+    multiValueHeaders: req.headers as { [name: string]: string[] },
+    httpMethod: requestContext.httpMethod || req.method,
+    isBase64Encoded: req.headers['x-api-gateway-is-base-64-encoded'] === 'true' || false,
+    path: req.path,
+    multiValueQueryStringParameters: req.headers as { [name: string]: string[] },
     body: JSON.stringify(req.body),
+    headers: req.headers as { [name: string]: string },
+    stageVariables: null,
+    resource: requestContext.resourcePath || req.path,
     requestContext,
-  } as any;
-}
+  };
+  req.apiGateway = {
+    event,
+  };
+  return next();
+};
 
 export function eventBridgeEventGenerator(req: Request): EventBridgeEvent<string, {}> {
   return {
