@@ -38,7 +38,7 @@ const lambdaDriver = (
 };
 
 const lambdaAuthorizerDriver = (
-  controller: APIGatewayRequestAuthorizerWithContextHandler<undefined>,
+  controller: APIGatewayRequestAuthorizerWithContextHandler<any>,
 ) => async (req: CustomAuthorizerRequest, res: Response, next: NextFunction) => {
   console.log(req.apiGateway);
   try {
