@@ -23,6 +23,7 @@
     "ajv": "^6.12.6",
     "aws-sdk": "^2.843.0",
     "http-errors": "^1.8.0",
+    "puppeteer-core": "^9.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
