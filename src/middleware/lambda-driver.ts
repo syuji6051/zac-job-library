@@ -4,12 +4,14 @@ import { Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import {
   APIGatewayProxyResult,
+  APIGatewayProxyWithCognitoAuthorizerEvent,
   APIGatewayProxyWithLambdaAuthorizerEvent,
   APIGatewayRequestAuthorizerWithContextHandler, Context, EventBridgeEvent, Handler, S3Event,
 } from 'aws-lambda';
 import {
   CustomAuthorizerContext,
-  CustomAuthorizerRequest, CustomRequest, eventBridgeEventGenerator, s3EventGenerator,
+  CustomAuthorizerRequest,
+  CustomRequest, CustomCognitoRequest, eventBridgeEventGenerator, s3EventGenerator,
 } from './aws-event-generator';
 
 const context: Partial<Context> = {
@@ -22,6 +24,26 @@ const lambdaDriver = (
     Handler<APIGatewayProxyWithLambdaAuthorizerEvent<CustomAuthorizerContext>,
     APIGatewayProxyResult>,
 ) => async (req: CustomRequest, res: Response, next: NextFunction) => {
+  try {
+    const {
+      body = JSON.stringify({}),
+      statusCode = 200,
+    } = await controller(
+      req.apiGateway.event, context as Context, undefined,
+    ) as APIGatewayProxyResult;
+    res.status(statusCode)
+      .send(JSON.parse(body));
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+const lambdaCognitoAuthorizerDriver = (
+  controller:
+    Handler<APIGatewayProxyWithCognitoAuthorizerEvent,
+    APIGatewayProxyResult>,
+) => async (req: CustomCognitoRequest, res: Response, next: NextFunction) => {
   try {
     const {
       body = JSON.stringify({}),
@@ -92,6 +114,7 @@ const lambdaDriverWithS3Event = (
 
 export {
   lambdaDriver,
+  lambdaCognitoAuthorizerDriver,
   lambdaAuthorizerDriver,
   lambdaDriverWithEventsBride,
   lambdaDriverWithS3Event,
