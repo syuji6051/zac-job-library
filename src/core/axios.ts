@@ -12,8 +12,8 @@ request.interceptors.request.use((c) => {
 request.interceptors.response.use((res) => {
   logger.debug(`response url: ${res.request.url}`);
   logger.debug(`response status: ${res.status}`);
-  logger.debug(`response headers: ${res.headers}`);
-  logger.debug(`response data: ${res.data}`);
+  logger.debug(`response headers: ${JSON.stringify(res.headers)}`);
+  logger.debug(`response data: ${(typeof (res.data) === 'object') ? JSON.stringify(res.data) : res.data}`);
   return res;
 });
 

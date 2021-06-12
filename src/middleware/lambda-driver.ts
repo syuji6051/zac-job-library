@@ -59,6 +59,26 @@ const lambdaCognitoAuthorizerDriver = (
   }
 };
 
+const lambdaEventV2AuthorizerDriver = (
+  controller:
+    Handler<APIGatewayProxyWithCognitoAuthorizerEvent,
+    APIGatewayProxyResult>,
+) => async (req: CustomCognitoRequest, res: Response, next: NextFunction) => {
+  try {
+    const {
+      body = JSON.stringify({}),
+      statusCode = 200,
+    } = await controller(
+      req.apiGateway.event, context as Context, undefined,
+    ) as APIGatewayProxyResult;
+    res.status(statusCode)
+      .send(JSON.parse(body));
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 const lambdaAuthorizerDriver = (
   controller: APIGatewayRequestAuthorizerWithContextHandler<any>,
 ) => async (req: CustomAuthorizerRequest, res: Response, next: NextFunction) => {
@@ -116,6 +136,7 @@ export {
   lambdaDriver,
   lambdaCognitoAuthorizerDriver,
   lambdaAuthorizerDriver,
+  lambdaEventV2AuthorizerDriver,
   lambdaDriverWithEventsBride,
   lambdaDriverWithS3Event,
 };
