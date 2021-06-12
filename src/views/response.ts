@@ -8,6 +8,7 @@ export function success(body?: any): APIGatewayProxyResult {
     body: JSON.stringify(body || {}),
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
     },
   };
 }
@@ -39,6 +40,7 @@ export function invalidErrorResponse(error: ValidationError): APIGatewayProxyRes
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
     },
   };
 }
@@ -54,6 +56,7 @@ export function serverErrorResponse(error: Error): APIGatewayProxyResult {
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
     },
   };
 }
