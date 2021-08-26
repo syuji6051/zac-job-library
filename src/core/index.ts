@@ -1,6 +1,7 @@
 export * from './ajv';
 export * from './asm';
 export * as s3 from './s3';
+export * from './batch';
 export * as errors from './errors';
 export { default as logger } from './logger';
 export * from './crypto';
