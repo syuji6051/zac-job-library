@@ -60,6 +60,7 @@ const apiGatewayEventV2Authorizer = (req: CustomAPIGatewayV2Request) => ({
   jwt: {
     claims: {
       username: req.header('x-apigateway-cognito-username'),
+      'cognito:username': req.header('x-apigateway-cognito-username'),
     },
     scopes: ['rp'],
   },
