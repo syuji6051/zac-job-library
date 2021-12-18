@@ -127,6 +127,7 @@ const apiGatewayProxyEventV2 = (
   rawPath: req.path,
   rawQueryString: JSON.stringify(req.query),
   headers: req.headers as { [name: string]: string },
+  body: JSON.stringify(req.body),
   queryStringParameters: req.query as { [name: string]: string },
   requestContext,
   isBase64Encoded: req.headers['x-api-gateway-is-base-64-encoded'] === 'true' || false,
