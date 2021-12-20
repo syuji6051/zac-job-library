@@ -25,12 +25,12 @@ const lambdaDriver = (
     APIGatewayProxyResult>,
 ) => async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const {
-      body = JSON.stringify({}),
-      statusCode = 200,
-    } = await controller(
+    const results = await controller(
       req.apiGateway.event, context as Context, undefined,
     ) as APIGatewayProxyResult;
+    const body = results?.body ?? JSON.stringify({});
+    const statusCode = results?.statusCode ?? 200;
+
     res.status(statusCode)
       .send(JSON.parse(body));
   } catch (err) {
