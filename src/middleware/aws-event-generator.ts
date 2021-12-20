@@ -8,6 +8,7 @@ import {
   APIGatewayRequestAuthorizerEvent,
   EventBridgeEvent,
   S3Event,
+  SNSEvent,
 } from 'aws-lambda';
 
 export interface APIGatewayProxyEventV2Authorizer {
@@ -30,6 +31,12 @@ export interface CustomAuthorizerContext {
 export interface CustomRequest extends Request {
   apiGateway?: {
     event: APIGatewayProxyWithLambdaAuthorizerEvent<CustomAuthorizerContext>
+  }
+}
+
+export interface CustomSNSRequest extends Request {
+  apiGateway?: {
+    event: SNSEvent,
   }
 }
 
@@ -185,6 +192,40 @@ export function eventBridgeEventGenerator(req: Request): EventBridgeEvent<string
     'detail-type': 'Scheduled Event',
   };
 }
+
+export const snsEventGenerator = () => (
+  req: CustomSNSRequest, _: Response, next: NextFunction,
+) => {
+  const event: SNSEvent = {
+    Records: [{
+      EventSource: '',
+      EventSubscriptionArn: '',
+      EventVersion: '',
+      Sns: {
+        Message: JSON.stringify(req.body),
+        Signature: '',
+        SignatureVersion: '',
+        SigningCertUrl: '',
+        Timestamp: '',
+        MessageId: '',
+        MessageAttributes: {
+          STAGE: {
+            Type: 'String',
+            Value: 'local',
+          },
+        },
+        Type: '',
+        UnsubscribeUrl: '',
+        TopicArn: '',
+        Subject: '',
+      },
+    }],
+  };
+  req.apiGateway = {
+    event,
+  };
+  return next();
+};
 
 export function s3EventGenerator(req: Request): S3Event {
   const { key, bucketName } = req.body;
