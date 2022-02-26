@@ -22,17 +22,18 @@ class Application {
 
   async run(event: APIGatewayProxyEventV2) {
     logger.info(`function ${this.name} start`);
-    await this.asyncModules;
-    logger.info(JSON.stringify(event));
-    return this.runner
-      .then((res) => {
-        logger.info(`function ${this.name} success`);
-        return res;
-      })
-      .catch((err: Error) => lambdaErrorHandler(err))
-      .finally(() => {
-        logger.info(`function ${this.name} end`);
-      });
+    return this.asyncModules.then(async () => {
+      logger.info(JSON.stringify(event));
+      return this.runner
+        .then((res) => {
+          logger.info(`function ${this.name} success`);
+          return res;
+        })
+        .catch((err: Error) => lambdaErrorHandler(err))
+        .finally(() => {
+          logger.info(`function ${this.name} end`);
+        });
+    });
   }
 }
 
