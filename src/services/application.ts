@@ -14,26 +14,23 @@ class Application {
 
   runner: Promise<APIGatewayProxyResult>;
 
-  constructor(name: string, runner: Promise<APIGatewayProxyResult>, asyncModules: Promise<void>) {
+  constructor(name: string, runner: Promise<APIGatewayProxyResult>) {
     this.name = name;
-    this.asyncModules = asyncModules;
     this.runner = runner;
   }
 
   async run(event: APIGatewayProxyEventV2) {
     logger.info(`function ${this.name} start`);
-    return this.asyncModules.then(async () => {
-      logger.info(JSON.stringify(event));
-      return this.runner
-        .then((res) => {
-          logger.info(`function ${this.name} success`);
-          return res;
-        })
-        .catch((err: Error) => lambdaErrorHandler(err))
-        .finally(() => {
-          logger.info(`function ${this.name} end`);
-        });
-    });
+    logger.info(JSON.stringify(event));
+    return this.runner
+      .then((res) => {
+        logger.info(`function ${this.name} success`);
+        return res;
+      })
+      .catch((err: Error) => lambdaErrorHandler(err))
+      .finally(() => {
+        logger.info(`function ${this.name} end`);
+      });
   }
 }
 
