@@ -1,16 +1,18 @@
+import { APIGatewayProxyEventV2, APIGatewayProxyResult } from 'aws-lambda';
+import { lambdaErrorHandler } from '../middleware/lambda-error-handler';
 import logger from '../core/logger';
 
-class Application<LambdaEventType> {
+class WebApplication {
   name: string;
 
-  runner: Promise<void>;
+  runner: Promise<APIGatewayProxyResult>;
 
-  constructor(name: string, runner: Promise<void>) {
+  constructor(name: string, runner: Promise<APIGatewayProxyResult>) {
     this.name = name;
     this.runner = runner;
   }
 
-  async run(event: LambdaEventType) {
+  async run(event: APIGatewayProxyEventV2) {
     logger.info(`function ${this.name} start`);
     logger.info(JSON.stringify(event));
     return this.runner
@@ -18,10 +20,11 @@ class Application<LambdaEventType> {
         logger.info(`function ${this.name} success`);
         return res;
       })
+      .catch((err: Error) => lambdaErrorHandler(err))
       .finally(() => {
         logger.info(`function ${this.name} end`);
       });
   }
 }
 
-export default Application;
+export default WebApplication;
