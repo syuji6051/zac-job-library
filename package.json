@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/syuji6051/zac-job-library#readme",
   "dependencies": {
-    "ajv": "^6.12.6",
     "aws-sdk": "^2.843.0",
     "aws4": "^1.11.0",
     "axios": "^0.21.1",
     "http-errors": "^1.8.0",
     "inversify": "^6.0.1",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "zod": "^3.13.4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.72",
