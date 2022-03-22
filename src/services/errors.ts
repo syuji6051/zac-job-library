@@ -4,8 +4,6 @@ import { publishSnsToSlack } from './sns';
 
 // eslint-disable-next-line import/prefer-default-export
 export class SlackError extends CustomError {
-  static error: SlackError;
-
   topic: string;
 
   slackParam: slack.PublishSnsToSlackMessage;
@@ -17,8 +15,7 @@ export class SlackError extends CustomError {
   }
 
   static async build(topic: string, slackParam: slack.PublishSnsToSlackMessage) {
-    this.error = new SlackError(topic, slackParam);
     await publishSnsToSlack(topic, slackParam);
-    throw this.error;
+    throw new SlackError(topic, slackParam);
   }
 }
