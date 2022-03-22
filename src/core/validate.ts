@@ -8,7 +8,7 @@ export const check = <T>(schema: z.ZodType<T>, target: any) => {
     logger.debug('validate error result value');
     logger.debug(JSON.stringify(res.error.issues));
     logger.error(res.error.message);
-    throw new TypeError(res.error.message);
+    throw new TypeError(JSON.stringify(res.error.issues));
   }
   return res.data;
 };
