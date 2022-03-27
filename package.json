@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/syuji6051/zac-job-library#readme",
   "dependencies": {
-    "@syuji6051/zac-job-interface": "^0.0.4",
+    "@syuji6051/zac-job-interface": "^0.0.5",
     "aws-sdk": "^2.843.0",
     "aws4": "^1.11.0",
     "axios": "^0.21.1",
