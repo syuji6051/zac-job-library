@@ -46,6 +46,8 @@ jobs:
         with:
           name: build
       - name: publish
-        run: npm publish
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+          npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
