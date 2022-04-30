@@ -1,4 +1,4 @@
-import { invalidErrorResponse } from 'src/views';
+import { invalidErrorResponse } from '../views';
 import { ZodValidateError } from '../core/errors';
 import { serverErrorResponse } from './apigateway-response';
 
