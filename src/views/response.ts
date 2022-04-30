@@ -1,5 +1,5 @@
 import { APIGatewayAuthorizerResult, APIGatewayProxyResult } from 'aws-lambda';
-import { ValidationError } from '../core/errors';
+import { ZodValidateError } from '../core/errors';
 import logger from '../core/logger';
 
 export function success(body?: any): APIGatewayProxyResult {
@@ -31,12 +31,12 @@ export const authorizerResponse = (
   context,
 });
 
-export function invalidErrorResponse(error: ValidationError): APIGatewayProxyResult {
-  const { code, message } = error;
+export function invalidErrorResponse(error: ZodValidateError): APIGatewayProxyResult {
+  const { message, cause } = error;
   return {
     statusCode: 400,
     body: JSON.stringify({
-      code, message,
+      code: 'invalid_request', message, cause,
     }),
     headers: {
       'Access-Control-Allow-Origin': '*',
