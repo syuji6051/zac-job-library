@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { z } from 'zod';
 import logger from './logger';
 
 export class CustomError extends Error {
@@ -9,6 +10,15 @@ export class CustomError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, CustomError);
     }
+  }
+}
+
+export class ZodValidateError extends CustomError {
+  cause: string[]
+
+  constructor(error: z.ZodError) {
+    super(JSON.stringify(error));
+    this.cause = error.issues.map((issue) => issue.message);
   }
 }
 
@@ -26,19 +36,5 @@ export class Errors extends CustomError {
       logger.error(`err index ${idx}: ${err.message}`);
       logger.error(err.stack);
     });
-  }
-}
-
-export class ValidationError extends CustomError {
-  code: string
-
-  status: number
-
-  cause: Error
-
-  constructor(message: string) {
-    super(message);
-    this.code = 'invalid_request';
-    this.status = 400;
   }
 }

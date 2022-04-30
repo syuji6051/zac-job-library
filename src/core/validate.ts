@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { logger } from '.';
+import { ZodValidateError } from './errors';
 
 // eslint-disable-next-line import/prefer-default-export
 export const check = <T>(schema: z.ZodType<T>, target: any) => {
@@ -8,7 +9,7 @@ export const check = <T>(schema: z.ZodType<T>, target: any) => {
     logger.debug('validate error result value');
     logger.debug(JSON.stringify(res.error.issues));
     logger.error(res.error.message);
-    throw new TypeError(JSON.stringify(res.error.issues));
+    throw new ZodValidateError(res.error);
   }
   return res.data;
 };
