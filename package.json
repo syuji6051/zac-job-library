@@ -1,6 +1,6 @@
 {
   "name": "@syuji6051/zac-job-library",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index",
